@@ -1,6 +1,9 @@
 FROM ubuntu:22.04
+RUN apt update && apt install -y curl vim neovim tree net-tools
 
-RUN apt update && apt install -y curl vim neovim tree
+#FROM node:18-alpine3.15 as builder
+#RUN apk add bash curl vim tree net-tools util-linux
+
 #RUN apt update
 #RUN apt install -y code-server
 #RUN apt install -y curl vim neovim tree
@@ -9,11 +12,11 @@ RUN apt update && apt install -y curl vim neovim tree
 RUN curl -fsSL https://code-server.dev/install.sh | sh
 
 # install VS Code extensions
-RUN code-server --install-extension redhat.vscode-yaml --install-extension ms-python.python --install-extension Vue.volar
+RUN code-server --install-extension redhat.vscode-yaml --install-extension ms-python.python --install-extension Vue.volar --install-extension octref.vetur
 
 
 # code-server setting
-RUN sed -i 's/127.0.0.1:8080/0.0.0.0:7000/g' /root/.config/code-server/config.yaml
+RUN sed -i 's/127.0.0.1:8080/0.0.0.0:7001/g' /root/.config/code-server/config.yaml
 RUN sed -i '/password/d' /root/.config/code-server/config.yaml
 RUN echo 'password: password' >> /root/.config/code-server/config.yaml
 
@@ -29,6 +32,8 @@ CMD code-server
 # podman rmi jy_job_code-server:latest --force && \
 # podman build -t jy_job_code-server /home/ulexv20/jy_job/code-server_dk
 # podman run -dt -p7000:7000 -v /home/ulexv20/jy_job:/jy_job --env-file /home/ulexv20/jy_job/db.env --name jy_job_code-server jy_job_code-server
+# podman run -dt -p7001:7001 -v /mnt/c/User/Administrator/_md_test:/jy_job --env-file /home/ulexv20/jy_job/db.env --name jy_job_code-server jy_job_code-server
+# podman run -dt -p7001:7001 -v /:/jy_local --name jy_pod_local_code-server jy_job_code-server
 # echo code-server:7000 && ssh -L 7000:192.168.0.107:7000 law-ai@203.245.3.119 -p22001
 
 
